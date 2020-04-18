@@ -7,6 +7,16 @@ const morgan = require('morgan');
 
 const app = express();
 const router = require('./router');
+const mongoose = require('mongoose');
+
+//DB Setup
+mongoose.connect('mongodb://127.0.0.1 :auth/auth', {useNewUrlParser: true});
+
+const connection = mongoose.connection;
+ 
+connection.on("connected", function() {
+  console.log("connected to db");
+});
 
 // App setup
 app.use(morgan('combined'));
