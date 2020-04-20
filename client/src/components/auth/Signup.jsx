@@ -9,9 +9,10 @@ class Signup extends Component {
                 <label htmlFor="">Email</label>
             </fieldset>
             <fieldset>
-                <label htmlFor="">Email</label>
+                <label htmlFor="">Pasword</label>
             </fieldset>
-        </form>);
+        </form>
+        );
     }
 }
  
