@@ -7,10 +7,20 @@ const LocalStrategy = require('passport-local');
 
 // Create local strategy for sign in
 const localLogin = new localStrategy({usernameField: 'email'}, function(email, password, done){
-// Verify this username and password, call done with user
-// if it is the correct username and password
+// Verify this email and password, call done with user
+// if it is the correct email and password
 // otherwise, call done with false
-})
+
+User.findOne({email:email}, function(err, user){
+    // search error
+    if(err) {return done(err);}
+    // user not found
+    if(!user) {return done(null, false);}
+
+    // compare passwords - is 'password' equal to user.password?
+    
+});
+});
 
 // Setup configuration options for JWT strategy
 const jwtOptions = {
@@ -18,12 +28,12 @@ const jwtOptions = {
     secretOrKey: config.secret
 };
 
-//Create JWT strategy fro handling authorization with token
+// Create JWT strategy for handling authorization with token
 const jwtLogin = new JwtStrategy (jwtOptions, function(payload, done){
 // Payload is the decoded jwt token
 // See if the user ID in the payload exists in our database
 // If it does, call 'done wiht that other
-//otherwise, call donw without a user object
+//otherwise, call done without a user object
 
 User.findById(payload.sub, function(err,user){
     
