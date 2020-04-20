@@ -6,21 +6,24 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local');
 
 // Create local strategy for sign in
-const localLogin = new LocalStrategy({usernameField: 'email'}, function(email, password, done){
+// Specify email property for username
+const localOptions = { usernameField: 'email' };
+const localLogin = new LocalStrategy(localOptions, function(email, password, done){
 // Verify this email and password, call done with user
 // if it is the correct email and password
 // otherwise, call done with false
 
-User.findOne({email:email}, function(err, user){
+User.findOne({email:email.toLowerCase()}, function(err, user){
     // search error
     if(err) {return done(err);}
     // user not found
     if(!user) {return done(null, false);}
 
     // compare passwords - is 'password' equal to user.password?
-    user.comparePassword(passowrd, function(err, isMatch){
+    user.comparePassword(password, function(err, isMatch){
         if (err) {return done(err); }
-        if(!isMatch) {return done(null, false);}
+       
+        if(!isMatch) {return done(null, false, { error: 'Your login details could not be verified. Please try again.' });}
 
         return done(null, user);
     });
@@ -37,7 +40,7 @@ const jwtOptions = {
 const jwtLogin = new JwtStrategy (jwtOptions, function(payload, done){
 // Payload is the decoded jwt token
 // See if the user ID in the payload exists in our database
-// If it does, call 'done wiht that other
+// If it does, call 'done with that other
 //otherwise, call done without a user object
 
 User.findById(payload.sub, function(err,user){

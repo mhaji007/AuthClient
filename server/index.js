@@ -20,6 +20,7 @@ connection.on("connected", function() {
 
 // App setup
 app.use(morgan('combined'));
+app.use(require('body-parser').urlencoded({ extended: true }));
 app.use(bodyParser.json({type:'*/*'}));
 router(app);
 

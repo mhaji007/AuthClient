@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt-nodejs')
+const bcrypt = require('bcrypt-nodejs');
 
 // Define our model
 const userSchema = new Schema({
@@ -9,7 +9,6 @@ const userSchema = new Schema({
 });
 
 // On save Hook, encrypt password
-
 
 // Before saving a model, run this function
 userSchema.pre('save', function(next){
@@ -21,7 +20,7 @@ userSchema.pre('save', function(next){
         if (err) {return next(err);}
 
         // hash (encrypt) our password using the salt
-        bcrypt.hash(user.passowrd, salt, null, function(err, hash) {
+        bcrypt.hash(user.password, salt, null, function(err, hash) {
             if (err) {return next (err);}
             
             // overwrite plain text password with encrypted password
@@ -34,7 +33,7 @@ userSchema.pre('save', function(next){
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, callback){
-    bcrypt.compare(candidatePassword, this.passowrd, function(err, isMatch){
+    bcrypt.compare(candidatePassword, this.password, function(err, isMatch){
         if (err) {return callback(err);}
 
         callback(null, isMatch);
@@ -43,7 +42,6 @@ userSchema.methods.comparePassword = function(candidatePassword, callback){
 }
 
 // Create the model class
-
 const ModelClass = mongoose.model('user', userSchema)
 
 // Export the model
